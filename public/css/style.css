@@ -1,0 +1,12 @@
+.checkbox {
+    margin-top: 1px;
+}
+
+.user-selector {
+    height: 75px;
+    overflow-y: scroll;
+}
+
+.user-selector label {
+    font-weight: 400;
+}
