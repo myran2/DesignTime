@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Task;
 use App\User;
+use App\Task_User;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -36,16 +37,16 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.index', [
-            'tasks'           => Task::orderBy('completed', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) {
-                $query->select('task_id')->from('task__users')->where('user_id', 1);
+            'tasks'           => Task::orderBy('completed', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->get(),
 
-            'tasksInComplete' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) {
-                $query->select('task_id')->from('task__users')->where('user_id', 1);
+            'tasksInComplete' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->where('completed', '0')->get(),
 
-            'tasksComplete'   => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) {
-                $query->select('task_id')->from('task__users')->where('user_id', 1);
+            'tasksComplete'   => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->where('completed', '1')->get(),
         ]);
     }
@@ -60,8 +61,8 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.filtered', [
-            'tasks'           => Task::orderBy('completed', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) {
-                $query->select('task_id')->from('task__users')->where('user_id', 1);
+            'tasks'           => Task::orderBy('completed', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->get(),
         ]);
     }
@@ -76,8 +77,8 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.filtered', [
-            'tasks' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) {
-                $query->select('task_id')->from('task__users')->where('user_id', 1);
+            'tasks' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->where('completed', '0')->get(),
         ]);
     }
@@ -92,8 +93,8 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.filtered', [
-            'tasks' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) {
-                $query->select('task_id')->from('task__users')->where('user_id', 1);
+            'tasks' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->where('completed', '1')->get(),
         ]);
     }
@@ -120,8 +121,11 @@ class TasksController extends Controller
         $this->validate($request, $this->rules);
         $user = Auth::user();
         $task = $request->all();
-        $task['user_id'] = $user->id;
-        Task::create($task);
+
+        $task_id = Task::create($task)->id;
+
+        Task_User::create(['task_id' => $task_id,
+                           'user_id' => $user->id]);
 
         return redirect('/tasks')->with('success', 'Task created');
     }
@@ -138,13 +142,15 @@ class TasksController extends Controller
         $task = Task::query()->findOrFail($id);
 
         $user = Auth::user();
-        $usersNotAssignedToTask = User::query()->where('id', '!=', $user->id)->orderBy('name', 'asc')->get();
+        // select * from users where id not in (select user_id from task__users where task_id = $id)
+        $usersNotAssignedToTask = User::query()->wherenotin('id', function ($query) use ($id){
+            $query->select('user_id')->from('task__users')->where('task_id', $id);
+        })->get();
 
         $data = array(
             'task' => $task,
-            'otherUsers' => $otherUsers
+            'otherUsers' => $usersNotAssignedToTask
         );
-        //return view('tasks.edit', compact('task'));
         return view('tasks.edit')->with($data);
     }
 
