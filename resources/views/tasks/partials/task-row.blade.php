@@ -17,28 +17,19 @@
 
     <!-- Task Status -->
     <td>
-        @if ($task->completed === 1)
+        @if ($task->status === 2)
             <span class="label label-success">
                 Complete
             </span>
+        @elseif ($task->status === 1)
+        <span class="label label-info">
+                In Progress
+            </span>
         @else
             <span class="label label-default">
-                Incomplete
+                Not Started
             </span>
         @endif
-    </td>
-
-    <!-- Task Status Checkbox -->
-    <td>
-        {{--
-        {!! Form::model($task, array('action' => array('TasksController@update', $task->id), 'method' => 'PUT', 'class'=>'form-inline', 'role' => 'form')) !!}
-            <div class="checkbox">
-                <label for="completed">
-                    {!! Form::checkbox('completed', 1, $task->completed, ['id' => 'completed','onClick' => 'this.form.submit()']) !!}
-                </label>
-            </div>
-        {!! Form::close() !!}
-        --}}
     </td>
 
     <!-- Task Edit Icon -->
