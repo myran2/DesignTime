@@ -10,7 +10,9 @@
         "laravel/legacy-factories": "^1.0",
         "laravelcollective/html": "6.*",
         "laravel/ui": "*",
-        "imanghafoori/laravel-temp-tag": "^1.0"
+        "imanghafoori/laravel-temp-tag": "^1.0",
+        "snapappointments/bootstrap-select": "^1.13",
+        "doctrine/dbal": "^2.11"
     },
     "require-dev": {
         "fzaninotto/faker": "*",

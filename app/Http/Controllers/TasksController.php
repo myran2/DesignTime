@@ -13,8 +13,7 @@ class TasksController extends Controller
     protected $rules = [
         'name' 			=> 'required|max:60',
         'description'   => 'max:155',
-        'completed'    	=> 'numeric',
-
+        'status'    	=> 'numeric',
     ];
 
     /**
@@ -37,17 +36,17 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.index', [
-            'tasks'           => Task::orderBy('completed', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+            'tasks'           => Task::orderBy('status', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
                 $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->get(),
 
             'tasksInComplete' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
                 $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->where('completed', '0')->get(),
+            })->where('status', '0')->get(),
 
             'tasksComplete'   => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
                 $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->where('completed', '1')->get(),
+            })->where('status', '1')->get(),
         ]);
     }
 
@@ -61,7 +60,7 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.filtered', [
-            'tasks'           => Task::orderBy('completed', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+            'tasks'           => Task::orderBy('status', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
                 $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->get(),
         ]);
@@ -79,7 +78,7 @@ class TasksController extends Controller
         return view('tasks.filtered', [
             'tasks' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
                 $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->where('completed', '0')->get(),
+            })->where('status', '0')->get(),
         ]);
     }
 
@@ -95,7 +94,7 @@ class TasksController extends Controller
         return view('tasks.filtered', [
             'tasks' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
                 $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->where('completed', '1')->get(),
+            })->where('status', '1')->get(),
         ]);
     }
 
@@ -142,7 +141,8 @@ class TasksController extends Controller
         $task = Task::query()->findOrFail($id);
 
         $user = Auth::user();
-        // select * from users where id not in (select user_id from task__users where task_id = $id)
+
+        // contains all users that are not already assigned to the task
         $usersNotAssignedToTask = User::query()->wherenotin('id', function ($query) use ($id){
             $query->select('user_id')->from('task__users')->where('task_id', $id);
         })->get();
@@ -169,8 +169,11 @@ class TasksController extends Controller
         $task = Task::findOrFail($id);
         $task->name = $request->input('name');
         $task->description = $request->input('description');
-        $task->completed = $request->input('completed');
+        $task->status = $request->input('status');
+
         $task->save();
+        //TaskUsers::delete from task__users where task_id = $task->id
+        //TaskUsers::insert into task__users (user_id, task_id) VALUES ()
 
         return redirect('tasks')->with('success', 'Task Updated');
     }

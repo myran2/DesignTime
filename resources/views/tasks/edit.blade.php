@@ -38,14 +38,11 @@
                             <div class="form-group row">
                                 <label for="status" class="col-sm-3 col-sm-offset-1 control-label text-right">Status</label>
                                 <div class="col-sm-6">
-                                    <div class="checkbox">
-                                        <label for="status">
-                                            {!! Form::checkbox('completed', 1, null, ['id' => 'status']) !!} Complete
-                                        </label>
-                                    </div>
+                                    {!! Form::select('status', array(0 => 'Not Started', 1 => 'In Progress', 2 => 'Complete'), 'status', array('class' => 'selectpicker')) !!}
                                 </div>
                             </div>
 
+                            <!-- Assigned Users -->
                             <div class="form-group row">
                                 {!! Form::label('additional-assigned-users', 'Additional Assigned Users', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6 user-selector">
@@ -53,7 +50,7 @@
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="user-{{$u->id}}">
                                             <label class="form-check-label" for="user-{{$u->id}}">
-                                                {{$u->name}}
+                                            <!--{!! Form::checkbox('assign-user', 1, null) !!} {{$u->name}}-->
                                             </label>
                                         </div>
                                     @endforeach
