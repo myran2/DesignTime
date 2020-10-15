@@ -33,27 +33,27 @@
                                 </div>
                             </div>
 
-
                             <!-- Task Status -->
                             <div class="form-group row">
-                                <label for="status" class="col-sm-3 col-sm-offset-1 control-label text-right">Status</label>
+                            {!! Form::label('status', 'Status', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::select('status', array(0 => 'Not Started', 1 => 'In Progress', 2 => 'Complete'), 'status', array('class' => 'selectpicker')) !!}
+                                    {!! Form::select('status', array(0 => 'Not Started', 1 => 'In Progress', 2 => 'Complete'), $task->status, array('class' => 'selectpicker')) !!}
                                 </div>
                             </div>
 
                             <!-- Assigned Users -->
                             <div class="form-group row">
-                                {!! Form::label('additional-assigned-users', 'Additional Assigned Users', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
-                                <div class="col-sm-6 user-selector">
-                                    @foreach ($otherUsers as $u)
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="user-{{$u->id}}">
-                                            <label class="form-check-label" for="user-{{$u->id}}">
-                                            <!--{!! Form::checkbox('assign-user', 1, null) !!} {{$u->name}}-->
-                                            </label>
-                                        </div>
-                                    @endforeach
+                                {!! Form::label('additional-assigned-users', 'Assigned Users', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
+                                <div class="col-sm-6">
+                                    <select name="assignedUsers[]" id="assignedUsers" class="selectpicker" multiple data-live-search="true">
+                                        @foreach ($taskUsers as $u)
+                                            @if (is_null($u->tskId))
+                                                <option value="{{$u->user_id}}">{{$u->name}}</option>
+                                            @else
+                                                <option value="{{$u->user_id}}" selected="selected">{{$u->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 
@@ -63,7 +63,6 @@
                                      {{Form::button('<span class="fa fa-save fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Save</span> <span class="hidden-xs">Changes</span>', array('type' => 'submit', 'class' => 'btn btn-success btn-block'))}}
                                 </div>
                             </div>
-
 
                         {!! Form::close() !!}
 

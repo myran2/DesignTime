@@ -142,14 +142,23 @@ class TasksController extends Controller
 
         $user = Auth::user();
 
-        // contains all users that are not already assigned to the task
-        $usersNotAssignedToTask = User::query()->wherenotin('id', function ($query) use ($id){
-            $query->select('user_id')->from('task__users')->where('task_id', $id);
-        })->get();
+        // grab the one task with supplied $id for the left join
+        $taskRow = Task_User::query()->select('*')->where('task_id', $id);
+
+        // left join users column against the one task row from above
+        // should result in:
+        //      user_id, name, taskId: user_id and name will be from the users table,
+        //      taskId will be NULL if the user is not assigned to the task or the task ID if the user is assigned to the task
+        $taskUsers = User::query()
+        ->leftJoinSub($taskRow, 'tu', function ($join) {
+            $join->on('users.id', '=', 'tu.user_id');
+        })->select('users.id as user_id', 'users.name as name', 'tu.id as tskId')
+        ->get();
 
         $data = array(
             'task' => $task,
-            'otherUsers' => $usersNotAssignedToTask
+            'taskUsers' => $taskUsers,
+            'user' => $user
         );
         return view('tasks.edit')->with($data);
     }
@@ -172,8 +181,13 @@ class TasksController extends Controller
         $task->status = $request->input('status');
 
         $task->save();
-        //TaskUsers::delete from task__users where task_id = $task->id
+        Task_User::where('task_id', $task->id)->delete();
         //TaskUsers::insert into task__users (user_id, task_id) VALUES ()
+        $rows = array();
+        foreach($request->input('assignedUsers') as $u) {
+            $rows[] = array('user_id' => $u, 'task_id' => $task->id);
+        }
+        Task_User::insert($rows);
 
         return redirect('tasks')->with('success', 'Task Updated');
     }
