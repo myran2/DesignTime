@@ -41,16 +41,24 @@
                                 </div>
                             </div>
 
+                            <!-- User that created the task-->
+                            <div class="form-group row">
+                            {!! Form::label('creator-name', 'Creator', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
+                                <div class="col-sm-6">
+                                    {{$creatorName}}
+                                </div>
+                            </div>
+
                             <!-- Assigned Users -->
                             <div class="form-group row">
-                                {!! Form::label('additional-assigned-users', 'Assigned Users', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
+                                {!! Form::label('additional-assigned-users', 'Additional Assigned Users', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
                                     <select name="assignedUsers[]" id="assignedUsers" class="selectpicker" multiple data-live-search="true">
                                         @foreach ($taskUsers as $u)
                                             @if (is_null($u->tskId))
-                                                <option value="{{$u->user_id}}">{{$u->name}}</option>
+                                                <option value="{{$u->id}}">{{$u->name}}</option>
                                             @else
-                                                <option value="{{$u->user_id}}" selected="selected">{{$u->name}}</option>
+                                                <option value="{{$u->id}}" selected="selected">{{$u->name}}</option>
                                             @endif
                                         @endforeach
                                     </select>

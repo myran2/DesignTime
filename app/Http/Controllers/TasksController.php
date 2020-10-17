@@ -6,6 +6,7 @@ use App\Task;
 use App\User;
 use App\Task_User;
 use Auth;
+use DB;
 use Illuminate\Http\Request;
 
 class TasksController extends Controller
@@ -109,7 +110,16 @@ class TasksController extends Controller
      */
     public function create()
     {
-        return view('tasks.create');
+        $user = Auth::user();
+
+        $additionalUsers = User::query()
+            ->where('id', '!=', $user->id)
+            ->get();
+        
+        $data = array(
+            'additionalUsers' => $additionalUsers,
+        );
+        return view('tasks.create')->with($data);
     }
 
     /**
@@ -124,11 +134,23 @@ class TasksController extends Controller
         $this->validate($request, $this->rules);
         $user = Auth::user();
         $task = $request->all();
+        $task['creator_id'] = $user->id;
 
         $task_id = Task::create($task)->id;
 
-        Task_User::create(['task_id' => $task_id,
-                           'user_id' => $user->id]);
+        // init task__user rows with the creator's row
+        $rows = array([
+            'task_id' => $task_id,
+            'user_id' => $user->id
+        ]);
+        
+        // add any additional assigned users
+        foreach($request->input('assignedUsers', []) as $u) {
+            $rows[] = array('user_id' => $u, 'task_id' => $task_id);
+        }
+
+        // commit to db
+        Task_User::insert($rows);
 
         return redirect('/tasks')->with('success', 'Task created');
     }
@@ -151,16 +173,20 @@ class TasksController extends Controller
 
         // left join users column against the one task row from above
         // should result in:
-        //      user_id, name, taskId: user_id and name will be from the users table,
+        //      id, name, taskId: id and name will be from the users table,
         //      taskId will be NULL if the user is not assigned to the task or the task ID if the user is assigned to the task
         $taskUsers = User::query()
-        ->leftJoinSub($taskRow, 'tu', function ($join) {
-            $join->on('users.id', '=', 'tu.user_id');
-        })->select('users.id as user_id', 'users.name as name', 'tu.id as tskId')
-        ->get();
+            ->leftJoinSub($taskRow, 'tu', function ($join) {
+                $join->on('users.id', '=', 'tu.user_id');
+            })->select('users.id', 'users.name as name', 'tu.id as tskId')
+            ->where('users.id', '!=', $task->creator_id)
+            ->get();
+
+        $creatorName = User::where("id", $task->creator_id)->value('name');
 
         $data = array(
             'task' => $task,
+            'creatorName' => $creatorName,
             'taskUsers' => $taskUsers,
             'user' => $user
         );
@@ -185,12 +211,17 @@ class TasksController extends Controller
         $task->status = $request->input('status');
 
         $task->save();
-        Task_User::where('task_id', $task->id)->delete();
-        //TaskUsers::insert into task__users (user_id, task_id) VALUES ()
+
+        Task_User::where([
+            ['task_id', '=', $task->id],
+            ['user_id', '!=', $task->creator_id]
+        ])->delete();
+
         $rows = array();
-        foreach($request->input('assignedUsers') as $u) {
+        foreach($request->input('assignedUsers', []) as $u) {
             $rows[] = array('user_id' => $u, 'task_id' => $task->id);
         }
+
         Task_User::insert($rows);
 
         return redirect('tasks')->with('success', 'Task Updated');
