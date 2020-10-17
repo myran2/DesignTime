@@ -40,13 +40,17 @@ class TasksController extends Controller
                 $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->get(),
 
-            'tasksInComplete' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+            'tasksNotStarted' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
                 $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->where('status', '0')->get(),
 
-            'tasksComplete'   => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+            'tasksInProgress' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
                 $query->select('task_id')->from('task__users')->where('user_id', $user->id);
             })->where('status', '1')->get(),
+
+            'tasksComplete'   => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
+                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
+            })->where('status', '2')->get(),
         ]);
     }
 
