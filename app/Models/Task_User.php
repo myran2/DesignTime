@@ -2,13 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Task_User extends Model
+class TaskUser extends Pivot
 {
-    use HasFactory;
-
-    protected $fillable = ['user_id', 'task_id'];
     public $timestamps = false;
 }

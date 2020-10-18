@@ -37,69 +37,10 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.index', [
-            'tasks'           => Task::orderBy('status', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
-                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->get(),
-
-            'tasksNotStarted' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
-                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->where('status', '0')->get(),
-
-            'tasksInProgress' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
-                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->where('status', '1')->get(),
-
-            'tasksComplete'   => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
-                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->where('status', '2')->get(),
-        ]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index_all()
-    {
-        $user = Auth::user();
-
-        return view('tasks.filtered', [
-            'tasks'           => Task::orderBy('status', 'asc')->orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
-                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->get(),
-        ]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index_incomplete()
-    {
-        $user = Auth::user();
-
-        return view('tasks.filtered', [
-            'tasks' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
-                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->where('status', '0')->get(),
-        ]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index_complete()
-    {
-        $user = Auth::user();
-
-        return view('tasks.filtered', [
-            'tasks' => Task::orderBy('created_at', 'asc')->wherein('id', function ($query) use ($user) {
-                $query->select('task_id')->from('task__users')->where('user_id', $user->id);
-            })->where('status', '1')->get(),
+            'tasks'           => $user->tasks()->orderBy('status', 'asc')->orderBy('created_at', 'asc')->get(),
+            'tasksNotStarted' => $user->tasks()->orderBy('status', 'asc')->orderBy('created_at', 'asc')->where('status', '0')->get(),
+            'tasksInProgress' => $user->tasks()->orderBy('status', 'asc')->orderBy('created_at', 'asc')->where('status', '1')->get(),
+            'tasksComplete'   => $user->tasks()->orderBy('status', 'asc')->orderBy('created_at', 'asc')->where('status', '2')->get(),
         ]);
     }
 
@@ -133,24 +74,17 @@ class TasksController extends Controller
     {
         $this->validate($request, $this->rules);
         $user = Auth::user();
-        $task = $request->all();
-        $task['creator_id'] = $user->id;
+        $task_data = $request->all();
+        $task_data['creator_id'] = $user->id;
 
-        $task_id = Task::create($task)->id;
+        // saves new task to task table
+        $task_id = Task::create($task_data)->id;
 
-        // init task__user rows with the creator's row
-        $rows = array([
-            'task_id' => $task_id,
-            'user_id' => $user->id
-        ]);
-        
-        // add any additional assigned users
-        foreach($request->input('assignedUsers', []) as $u) {
-            $rows[] = array('user_id' => $u, 'task_id' => $task_id);
-        }
+        $user_ids = $request->input('assignedUsers', []);
+        $user_ids[] = $user->id;
 
-        // commit to db
-        Task_User::insert($rows);
+        // saves user relations to task_user pivot table
+        Task::query()->findOrFail($task_id)->users()->sync($user_ids);
 
         return redirect('/tasks')->with('success', 'Task created');
     }
@@ -168,15 +102,20 @@ class TasksController extends Controller
 
         $user = Auth::user();
 
-        // grab the one task with supplied $id for the left join
-        $taskRow = Task_User::query()->select('*')->where('task_id', $id);
 
-        // left join users column against the one task row from above
+        /**
+         * TODO: There's probably a nicer way to do all of this.
+         * Look for a different way to query all users and flag the ones that are already associated with a task.
+         */
+        // query pivot table directly so that we can use it for the left join below
+        $taskUserResult = DB::table('task_user')->where('task_id', $id);
+
+        // left join users column against the one task_user rows from above
         // should result in:
         //      id, name, taskId: id and name will be from the users table,
         //      taskId will be NULL if the user is not assigned to the task or the task ID if the user is assigned to the task
         $taskUsers = User::query()
-            ->leftJoinSub($taskRow, 'tu', function ($join) {
+            ->leftJoinSub($taskUserResult, 'tu', function ($join) {
                 $join->on('users.id', '=', 'tu.user_id');
             })->select('users.id', 'users.name as name', 'tu.id as tskId')
             ->where('users.id', '!=', $task->creator_id)
@@ -205,24 +144,17 @@ class TasksController extends Controller
     {
         $this->validate($request, $this->rules);
 
+        // save task based on request from view
         $task = Task::findOrFail($id);
         $task->name = $request->input('name');
         $task->description = $request->input('description');
         $task->status = $request->input('status');
-
         $task->save();
 
-        Task_User::where([
-            ['task_id', '=', $task->id],
-            ['user_id', '!=', $task->creator_id]
-        ])->delete();
-
-        $rows = array();
-        foreach($request->input('assignedUsers', []) as $u) {
-            $rows[] = array('user_id' => $u, 'task_id' => $task->id);
-        }
-
-        Task_User::insert($rows);
+        // sync users assigned to task based on assignedUsers[] selector from view
+        $user_ids = $request->input('assignedUsers', []);
+        $user_ids[] = $task->creator_id;
+        $task->users()->sync($user_ids);
 
         return redirect('tasks')->with('success', 'Task Updated');
     }

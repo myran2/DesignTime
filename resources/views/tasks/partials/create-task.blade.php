@@ -1,5 +1,5 @@
 <!-- New Task Form -->
-{!! Form::model(new App\Task, ['route' => ['tasks.store'], 'class'=>'form-horizontal', 'role' => 'form']) !!}
+{!! Form::model(new App\Models\Task, ['route' => ['tasks.store'], 'class'=>'form-horizontal', 'role' => 'form']) !!}
 
     <!-- Task Name -->
     <div class="form-group">

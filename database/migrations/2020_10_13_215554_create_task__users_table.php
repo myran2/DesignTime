@@ -13,7 +13,7 @@ class CreateTaskUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('task__users', function (Blueprint $table) {
+        Schema::create('task_user', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('task_id')->unsigned();
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
@@ -34,7 +34,7 @@ class CreateTaskUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task__users');
+        Schema::dropIfExists('task_user');
 
         Schema::table('tasks', function (Blueprint $table) {
             $table->integer('user_id')->unsigned()->after('id');
