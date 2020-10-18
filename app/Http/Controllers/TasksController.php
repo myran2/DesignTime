@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Task;
-use App\User;
-use App\Task_User;
+use App\Models\Task;
+use App\Models\User;
+use App\Models\Task_User;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
