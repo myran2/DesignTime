@@ -32,17 +32,28 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-
-        $projects = Project::leftJoin('tasks', 'tasks.project_id', 'projects.id')
-                            ->select('projects.name', 'projects.description', 'projects.id')
-                            ->selectRaw('MAX(tasks.status) as status')
-                            ->groupBy('tasks.project_id');
+        $maxStatusByProject = Task::select('project_id')->selectRaw('max(status) as mstatus')->groupBy('project_id');
 
         return view('projects.index', [
-            'projects'           => $projects->get(),
-            'projectsNotStarted' => $projects->where('status', 0)->get(),
-            'projectsInProgress' => $projects->where('status', 1)->get(),
-            'projectsComplete'   => $projects->where('status', 2)->get(),
+            'projects'           => Project::leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
+                                        $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
+                                    })->select('projects.name', 'projects.description', 'projects.id', 'mstatus')
+                                    ->get(),
+
+            'projectsNotStarted' => Project::leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
+                                        $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
+                                    })->select('projects.name', 'projects.description', 'projects.id', 'mstatus')
+                                    ->where('mstatus', '0')->get(),
+
+            'projectsInProgress' => Project::leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
+                                        $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
+                                    })->select('projects.name', 'projects.description', 'projects.id', 'mstatus')
+                                    ->where('mstatus', '1')->get(),
+
+            'projectsComplete'   => Project::leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
+                                        $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
+                                    })->select('projects.name', 'projects.description', 'projects.id', 'mstatus')
+                                    ->where('mstatus', '2')->get(),
         ]);
     }
 
@@ -87,17 +98,6 @@ class ProjectsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -105,7 +105,18 @@ class ProjectsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $project = Project::query()->findOrFail($id);
+
+        $user = Auth::user();
+
+        $tasks = Task::query()->where('project_id', $id)->orWhereNull('project_id')->get();
+        
+        $data = array(
+            'project' => $project,
+            //'user' => $user,
+            'tasks' => $tasks,
+        );
+        return view('projects.edit')->with($data);
     }
 
     /**
@@ -122,7 +133,7 @@ class ProjectsController extends Controller
         $project = Project::findOrFail($id);
 
         $task_ids = $request->input('tasks', []);
-        $project->tasks()->sync($task_ids);
+        Task::whereIn('id', $task_ids)->update(['project_id' => $id]);
 
         return redirect('projects')->with('success', 'Project Updated');
     }

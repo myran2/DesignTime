@@ -11,61 +11,45 @@
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Editing Task <strong>{{$task->name}}</strong>
+                        Editing Project <strong>{{$project->name}}</strong>
                     </div>
                     <div class="panel-body">
 
-                        {!! Form::model($task, array('action' => array('TasksController@update', $task->id), 'method' => 'PUT')) !!}
+                        {!! Form::model($project, array('action' => array('ProjectsController@update', $project->id), 'method' => 'PUT')) !!}
 
-                            <!-- Task Name -->    
+                            <!-- Project Name -->    
                             <div class="form-group row">
-                                {!! Form::label('name', 'Task Name', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
+                                {!! Form::label('name', 'Project Name', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
                                     {!! Form::text('name', null, array('class' => 'form-control')) !!}
                                 </div>
                             </div>
 
-                            <!-- Task Description -->
+                            <!-- Project Description -->
                             <div class="form-group row">
-                                {!! Form::label('description', 'Task Description', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
+                                {!! Form::label('description', 'Project Description', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
                                     {!! Form::textarea('description', null, array('class' => 'form-control')) !!}
                                 </div>
                             </div>
 
-                            <!-- Task Status -->
+                            <!-- Associated Tasks-->
                             <div class="form-group row">
-                            {!! Form::label('status', 'Status', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
+                                {!! Form::label('tasks', 'Associated Tasks', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::select('status', array(0 => 'Not Started', 1 => 'In Progress', 2 => 'Complete'), $task->status, array('class' => 'selectpicker')) !!}
-                                </div>
-                            </div>
-
-                            <!-- User that created the task-->
-                            <div class="form-group row">
-                            {!! Form::label('creator-name', 'Creator', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
-                                <div class="col-sm-6">
-                                    {{$creatorName}}
-                                </div>
-                            </div>
-
-                            <!-- Assigned Users -->
-                            <div class="form-group row">
-                                {!! Form::label('additional-assigned-users', 'Additional Assigned Users', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
-                                <div class="col-sm-6">
-                                    <select name="assignedUsers[]" id="assignedUsers" class="selectpicker" multiple data-live-search="true">
-                                        @foreach ($taskUsers as $u)
-                                            @if (is_null($u->tskId))
-                                                <option value="{{$u->id}}">{{$u->name}}</option>
+                                    <select name="tasks[]" id="tasks" class="selectpicker" multiple data-live-search="true">
+                                        @foreach ($tasks as $t)
+                                            @if (is_null($t->project_id))
+                                                <option value="{{$t->id}}">{{$t->name}}</option>
                                             @else
-                                                <option value="{{$u->id}}" selected="selected">{{$u->name}}</option>
+                                                <option value="{{$t->id}}" selected="selected">{{$t->name}}</option>
                                             @endif
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Save Task Button -->
+                            <!-- Save Project Button -->
                             <div class="form-group row">
                                 <div class="col-sm-offset-4 col-sm-6">
                                      {{Form::button('<span class="fa fa-save fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Save</span> <span class="hidden-xs">Changes</span>', array('type' => 'submit', 'class' => 'btn btn-success btn-block'))}}
@@ -76,13 +60,13 @@
 
                     </div>
                     <div class="panel-footer">
-                        <a href="{{ route('tasks.index') }}" class="btn btn-sm btn-info" type="button">
-                            <span class="fa fa-reply" aria-hidden="true"></span> Back to Tasks
+                        <a href="{{ route('projects.index') }}" class="btn btn-sm btn-info" type="button">
+                            <span class="fa fa-reply" aria-hidden="true"></span> Back to Projects
                         </a>
 
-                        {!! Form::open(array('class' => 'form-inline pull-right', 'method' => 'DELETE', 'route' => array('tasks.destroy', $task->id))) !!}
+                        {!! Form::open(array('class' => 'form-inline pull-right', 'method' => 'DELETE', 'route' => array('projects.destroy', $project->id))) !!}
                             {{ method_field('DELETE') }}
-                            {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Task</span>', array('type' => 'submit', 'class' => 'btn btn-danger'))}}
+                            {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Project</span>', array('type' => 'submit', 'class' => 'btn btn-danger'))}}
                         {!! Form::close() !!}
 
                     </div>

@@ -15,7 +15,6 @@
                     <li><a href="#complete" data-toggle="tab"><span class="fa fa-check-square-o" aria-hidden="true"></span> <span class="hidden-xs">Complete</span></a></li>
                 </ul>
                 <div id="my-tab-content" class="tab-content">
-
                     @include('projects/partials/project-tab', array('tab' => 'all', 'projects' => $projects, 'title' => 'All Projects', 'status' => 'active'))
                     @include('projects/partials/project-tab', array('tab' => 'not-started', 'projects' => $projectsNotStarted, 'title' => 'Not Started'))
                     @include('projects/partials/project-tab', array('tab' => 'in-progress', 'projects' => $projectsInProgress, 'title' => 'In Progress'))
