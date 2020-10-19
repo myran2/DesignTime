@@ -41,22 +41,6 @@
                                 </div>
                             </div>
 
-                             <!-- Project -->
-                             <div class="form-group row">
-                                {!! Form::label('project', 'Project', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
-                                <div class="col-sm-6">
-                                    <select name="project" id="project" class="selectpicker" multiple data-live-search="true">
-                                        @foreach ($projects as $p)
-                                            @if ($p->id === $task->project_id)
-                                                <option value="{{$p->id}}" selected="selected">{{$p->name}}</option>
-                                            @else
-                                                <option value="{{$p->id}}">{{$p->name}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
                             <!-- User that created the task-->
                             <div class="form-group row">
                             {!! Form::label('creator-name', 'Creator', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
@@ -69,7 +53,7 @@
                             <div class="form-group row">
                                 {!! Form::label('additional-assigned-users', 'Additional Assigned Users', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    <select name="assignedUsers[]" id="assignedUsers" class="selectpicker" data-live-search="true">
+                                    <select name="assignedUsers[]" id="assignedUsers" class="selectpicker" multiple data-live-search="true">
                                         @foreach ($taskUsers as $u)
                                             @if (is_null($u->tskId))
                                                 <option value="{{$u->id}}">{{$u->name}}</option>

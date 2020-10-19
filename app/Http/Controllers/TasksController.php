@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Project;
 use App\Models\Task_User;
 use Auth;
 use DB;
@@ -56,9 +57,12 @@ class TasksController extends Controller
         $additionalUsers = User::query()
             ->where('id', '!=', $user->id)
             ->get();
+
+        $projects = Project::query()->get();
         
         $data = array(
             'additionalUsers' => $additionalUsers,
+            'projects' => $projects
         );
         return view('tasks.create')->with($data);
     }
@@ -83,7 +87,7 @@ class TasksController extends Controller
         $user_ids = $request->input('assignedUsers', []);
         $user_ids[] = $user->id;
 
-        // saves user relations to task_user pivot table
+        // fetch newly inserted task and use it to insert user relations to task_user pivot table
         Task::query()->findOrFail($task_id)->users()->sync($user_ids);
 
         return redirect('/tasks')->with('success', 'Task created');
@@ -102,10 +106,10 @@ class TasksController extends Controller
 
         $user = Auth::user();
 
-
         /**
          * TODO: There's probably a nicer way to do all of this.
-         * Look for a different way to query all users and flag the ones that are already associated with a task.
+         * Look for a different way to query all users and flag the ones that are already associated with a task
+         * Without directly querying the pivot table.
          */
         // query pivot table directly so that we can use it for the left join below
         $taskUserResult = DB::table('task_user')->where('task_id', $id);
@@ -123,11 +127,14 @@ class TasksController extends Controller
 
         $creatorName = User::where("id", $task->creator_id)->value('name');
 
+        $projects = Project::query()->get();
+
         $data = array(
             'task' => $task,
             'creatorName' => $creatorName,
             'taskUsers' => $taskUsers,
-            'user' => $user
+            'user' => $user,
+            'projects' => $projects
         );
         return view('tasks.edit')->with($data);
     }
@@ -149,6 +156,8 @@ class TasksController extends Controller
         $task->name = $request->input('name');
         $task->description = $request->input('description');
         $task->status = $request->input('status');
+        // Assign a project to the task if one is selected.
+        $task['project_id'] = $request->input('project', NULL);
         $task->save();
 
         // sync users assigned to task based on assignedUsers[] selector from view

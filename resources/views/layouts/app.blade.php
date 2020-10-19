@@ -66,11 +66,17 @@
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li class="{{ Request::is('tasks') ? 'active' : '' }}"><a href="{{ url('/tasks') }}"><i class="fa fa-btn fa-tasks" aria-hidden="true"></i>Tasks Overview</a></li>
-                                    <!--<li class="{{ Request::is('tasks-all') ? 'active' : '' }}"><a href="{{ url('/tasks-all') }}"><i class="fa fa-btn fa-filter" aria-hidden="true"></i>All Tasks</a></li>
-                                    <li class="{{ Request::is('tasks-incomplete') ? 'active' : '' }}"><a href="{{ url('/tasks-incomplete') }}"><i class="fa fa-btn fa-square-o" aria-hidden="true"></i>Incomplete Tasks</a></li>
-                                    <li class="{{ Request::is('tasks-complete') ? 'active' : '' }}"><a href="{{ url('/tasks-complete') }}"><i class="fa fa-btn fa-check-square-o" aria-hidden="true"></i>Complete Tasks</a></li>
-                                    -->
                                     <li class="{{ Request::is('tasks/create') ? 'active' : '' }}"><a href="{{ url('/tasks/create') }}"><i class="fa fa-btn fa-plus" aria-hidden="true"></i>Create Task</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    Projects <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li class="{{ Request::is('projects') ? 'active' : '' }}"><a href="{{ url('/projects') }}"><i class="fa fa-btn fa-tasks" aria-hidden="true"></i>Projects Overview</a></li>
+                                    <li class="{{ Request::is('projects/create') ? 'active' : '' }}"><a href="{{ url('/projects/create') }}"><i class="fa fa-btn fa-plus" aria-hidden="true"></i>Create Project</a></li>
                                 </ul>
                             </li>
 

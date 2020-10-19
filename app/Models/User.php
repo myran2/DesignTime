@@ -27,8 +27,16 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * Get all tasks that this user is assigned to
+     */
     public function tasks()
     {
         return $this->belongsToMany('App\Models\Task');
+    }
+
+    public function projects()
+    {
+        return $this->hasMany('App\Models\Project', 'creator_id');
     }
 }

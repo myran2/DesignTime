@@ -16,10 +16,10 @@
                 </ul>
                 <div id="my-tab-content" class="tab-content">
 
-                    @include('tasks/partials/task-tab', array('tab' => 'all', 'tasks' => $tasks, 'title' => 'All Tasks', 'status' => 'active'))
-                    @include('tasks/partials/task-tab', array('tab' => 'not-started', 'tasks' => $tasksNotStarted, 'title' => 'Not Started Tasks'))
-                    @include('tasks/partials/task-tab', array('tab' => 'in-progress', 'tasks' => $tasksInProgress, 'title' => 'In Progress Tasks'))
-                    @include('tasks/partials/task-tab', array('tab' => 'complete', 'tasks' => $tasksComplete, 'title' => 'Complete Tasks'))
+                    @include('projects/partials/project-tab', array('tab' => 'all', 'projects' => $projects, 'title' => 'All Projects', 'status' => 'active'))
+                    @include('projects/partials/project-tab', array('tab' => 'not-started', 'projects' => $projectsNotStarted, 'title' => 'Not Started'))
+                    @include('projects/partials/project-tab', array('tab' => 'in-progress', 'projects' => $projectsInProgress, 'title' => 'In Progress'))
+                    @include('projects/partials/project-tab', array('tab' => 'complete', 'projects' => $projectsComplete, 'title' => 'Complete'))
                 </div>
             </div>
         </div>

@@ -19,6 +19,18 @@
         </div>
     </div>
 
+    <!-- Project -->
+    <div class="form-group row">
+        {!! Form::label('projects', 'Project', array('class' => 'col-sm-3 control-label text-right')) !!}
+        <div class="col-sm-6">
+            <select name="project" id="project" class="selectpicker" multiple data-live-search="true">
+                @foreach ($projects as $p)
+                    <option value="{{$p->id}}">{{$p->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
     <!-- Assigned Users -->
     <div class="form-group row">
         {!! Form::label('additional-assigned-users', 'Additional Assigned Users', array('class' => 'col-sm-3 control-label text-right')) !!}
@@ -33,7 +45,7 @@
 
     <!-- Add Task Button -->
     <div class="form-group">
-        <div class="col-sm-offset-4 col-sm-6">
+        <div class="col-sm-offset-3 col-sm-6">
              {{Form::button('<span class="fa fa-plus fa-fw" aria-hidden="true"></span> Create Task', array('type' => 'submit', 'class' => 'btn btn-success btn-block'))}}
         </div>
     </div>

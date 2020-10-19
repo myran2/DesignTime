@@ -13,8 +13,19 @@ class Task extends Model
      */
     protected $fillable = ['user_id', 'name', 'description', 'status', 'creator_id'];
 
+    /**
+     * Get all users assigned to this task
+     */
     public function users()
     {
         return $this->belongsToMany('App\Models\User');
+    }
+
+    /**
+     * Get this task's parent project
+     */
+    public function project()
+    {
+        return $this->belongsTo('App\Models\Project');
     }
 }

@@ -12,8 +12,6 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::redirect('/home', '/tasks');
 Route::redirect('/', '/tasks');
 
-// USER TASKS ROUTES
 Route::resource('/tasks', 'TasksController');
-Route::get('/tasks-all', 'TasksController@index_all');
-Route::get('/tasks-complete', 'TasksController@index_complete');
-Route::get('/tasks-incomplete', 'TasksController@index_incomplete');
+
+Route::resource('/projects', 'ProjectsController');

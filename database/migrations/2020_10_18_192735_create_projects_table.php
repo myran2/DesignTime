@@ -22,7 +22,7 @@ class CreateProjectsTable extends Migration
         });
 
         Schema::table('tasks', function (Blueprint $table) {
-            $table->integer('project_id')->unsigned()->after('creator_id');
+            $table->integer('project_id')->unsigned()->nullable()->after('creator_id');
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
     }
