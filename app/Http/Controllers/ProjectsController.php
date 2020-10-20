@@ -131,6 +131,9 @@ class ProjectsController extends Controller
         $this->validate($request, $this->rules);
 
         $project = Project::findOrFail($id);
+        $project->name = $request->input('name');
+        $project->description = $request->input('description');
+        $project->save();
 
         $task_ids = $request->input('tasks', []);
         Task::whereIn('id', $task_ids)->update(['project_id' => $id]);

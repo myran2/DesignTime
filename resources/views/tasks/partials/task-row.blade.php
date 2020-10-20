@@ -5,13 +5,14 @@
         {{ $task->id }}
     </td>-->
 
-    <td class="table-text">
-        {{ $task->project()->value('name') }}
-    </td>
-
     <!-- Task Name -->
     <td class="table-text">
         {{ $task->name }}
+    </td>
+
+    <!-- Parent Project Name -->
+    <td class="table-text">
+        {{ $task->project()->value('name') }}
     </td>
 
     <!-- Task Description -->
