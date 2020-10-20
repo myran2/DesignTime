@@ -14,8 +14,8 @@ class AddTaskOwnerColumn extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->integer('creator_id')->unsigned()->after('status');
-            $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('creator_id')->unsigned()->nullable()->after('status');
+            $table->foreign('creator_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

@@ -16,8 +16,8 @@ class ProjectsDropStatusAddCreatorId extends Migration
         Schema::table('Projects', function (Blueprint $table) {
             $table->dropColumn('status');
 
-            $table->integer('creator_id')->unsigned()->after('id');
-            $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('creator_id')->unsigned()->nullable()->after('id');
+            $table->foreign('creator_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 
