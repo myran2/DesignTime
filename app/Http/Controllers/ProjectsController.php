@@ -32,28 +32,31 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        $maxStatusByProject = Task::select('project_id')->selectRaw('max(status) as mstatus')->groupBy('project_id');
+        $maxStatusByProject = Task::select('project_id')->selectRaw('avg(status) as avg_status')->groupBy('project_id');
 
         return view('projects.index', [
             'projects'           => Project::leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
                                         $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
-                                    })->select('projects.name', 'projects.description', 'projects.id', 'mstatus')
+                                    })->select('projects.name', 'projects.description', 'projects.id', 'avg_status')
                                     ->get(),
 
+            // projects containing only tasks that are not started
             'projectsNotStarted' => Project::leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
                                         $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
-                                    })->select('projects.name', 'projects.description', 'projects.id', 'mstatus')
-                                    ->where('mstatus', '0')->get(),
+                                    })->select('projects.name', 'projects.description', 'projects.id', 'avg_status')
+                                    ->where('avg_status', '0')->get(),
 
-            'projectsInProgress' => Project::leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
-                                        $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
-                                    })->select('projects.name', 'projects.description', 'projects.id', 'mstatus')
-                                    ->where('mstatus', '1')->get(),
-
+            // projects containing only tasks that are complete
             'projectsComplete'   => Project::leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
                                         $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
-                                    })->select('projects.name', 'projects.description', 'projects.id', 'mstatus')
-                                    ->where('mstatus', '2')->get(),
+                                    })->select('projects.name', 'projects.description', 'projects.id', 'avg_status')
+                                    ->where('avg_status', '2')->get(),
+
+            // everything else (1+ in progress task or a mix of complete and not started)
+            'projectsInProgress' => Project::leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
+                                        $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
+                                    })->select('projects.name', 'projects.description', 'projects.id', 'avg_status')
+                                    ->where('avg_status', '>', 0)->where('avg_status', '<', 2)->get(),
         ]);
     }
 

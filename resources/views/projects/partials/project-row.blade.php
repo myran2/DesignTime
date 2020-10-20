@@ -11,15 +11,15 @@
 
     <!-- Project Status -->
     <td>
-        @if ($project->mstatus === 2)
+        @if ($project->avg_status == 2.0)
             <span class="label label-success">
                 Complete
             </span>
-        @elseif ($project->mstatus === 1)
+        @elseif ($project->avg_status > 0 && $project->avg_status < 2)
         <span class="label label-info">
                 In Progress
-            </span>
-        @elseif ($project->mstatus === 0)
+        </span>
+        @elseif ($project->avg_status == 0.0)
             <span class="label label-default">
                 Not Started
             </span>
