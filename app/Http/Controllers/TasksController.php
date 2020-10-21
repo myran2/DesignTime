@@ -38,10 +38,10 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.index', [
-            'tasks'           => $user->tasks()->orderBy('status', 'asc')->orderBy('created_at', 'asc')->get(),
-            'tasksNotStarted' => $user->tasks()->orderBy('status', 'asc')->orderBy('created_at', 'asc')->where('status', '0')->get(),
-            'tasksInProgress' => $user->tasks()->orderBy('status', 'asc')->orderBy('created_at', 'asc')->where('status', '1')->get(),
-            'tasksComplete'   => $user->tasks()->orderBy('status', 'asc')->orderBy('created_at', 'asc')->where('status', '2')->get(),
+            'tasks'           => $user->tasks()->orderBy('pivot_sort_order')->get(),
+            'tasksNotStarted' => $user->tasks()->where('status', '0')->orderBy('pivot_sort_order')->get(),
+            'tasksInProgress' => $user->tasks()->where('status', '1')->orderBy('pivot_sort_order')->get(),
+            'tasksComplete'   => $user->tasks()->where('status', '2')->orderBy('pivot_sort_order')->get(),
         ]);
     }
 
@@ -180,5 +180,15 @@ class TasksController extends Controller
         Task::findOrFail($id)->delete();
 
         return redirect('/tasks')->with('success', 'Task Deleted');
+    }
+
+    public function setOrder(Request $request)
+    {
+        $user = Auth::user();
+
+        foreach($request->input('item') as $sort_order => $task_id) {
+            echo $task_id . " " . $sort_order ."\n\n";
+            $user->tasks()->updateExistingPivot($task_id, ['sort_order' => $sort_order]);
+        }
     }
 }

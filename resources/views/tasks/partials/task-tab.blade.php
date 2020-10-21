@@ -4,7 +4,7 @@
     </h1>
 
     <div class="table-responsive">
-        <table class="table table-striped task-table table-hover">
+        <table class="table table-striped table-hover" id="task-table">
             <thead>
                <!-- <th>ID</th>-->
                 <th>Name</th>
@@ -20,3 +20,28 @@
         </table>
     </div>
 </div>
+
+@section('scripts')
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('tbody').sortable({
+            update:function(event, ui) {
+                $.ajax({
+                    type:'POST',
+                    url:'{{ url("/tasks/order") }}',
+                    data: $(this).sortable('serialize'),
+                    success: function(data) {
+                    },
+                    error: function() {
+                        alert('Sort save failed!');
+                    }
+                });
+            }
+        });
+    </script>
+@stop

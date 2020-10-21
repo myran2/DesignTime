@@ -12,7 +12,8 @@
         "laravel/ui": "*",
         "imanghafoori/laravel-temp-tag": "^1.0",
         "snapappointments/bootstrap-select": "^1.13",
-        "doctrine/dbal": "^2.11"
+        "doctrine/dbal": "^2.11",
+        "components/jqueryui": "^1.12"
     },
     "require-dev": {
         "fzaninotto/faker": "*",

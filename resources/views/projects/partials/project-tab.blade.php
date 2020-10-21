@@ -4,7 +4,7 @@
     </h1>
 
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped table-hover">
             <thead>
                 <th>Name</th>
                 <th>Description</th>

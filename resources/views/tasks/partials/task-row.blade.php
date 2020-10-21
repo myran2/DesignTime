@@ -1,10 +1,4 @@
-<tr>
-
-    <!-- Task Id -->
-    <!--<td class="table-text">
-        {{ $task->id }}
-    </td>-->
-
+<tr id="item_{{ $task->id }}">
     <!-- Task Name -->
     <td class="table-text">
         {{ $task->name }}
