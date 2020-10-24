@@ -45,7 +45,7 @@
                              <div class="form-group row">
                                 {!! Form::label('project', 'Project', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    <select name="project" id="project" class="selectpicker" multiple data-live-search="true">
+                                    <select name="project" id="project" class="selectpicker" data-live-search="true">
                                         @foreach ($projects as $p)
                                             @if ($p->id === $task->project_id)
                                                 <option value="{{$p->id}}" selected="selected">{{$p->name}}</option>
