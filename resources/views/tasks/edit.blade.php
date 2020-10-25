@@ -70,7 +70,7 @@
                             <div class="form-group row">
                                 {!! Form::label('additional-assigned-users', 'Additional Assigned Users', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    <select name="assignedUsers[]" id="assignedUsers" class="selectpicker" data-live-search="true">
+                                    <select name="assignedUsers[]" id="assignedUsers" class="selectpicker" data-live-search="true" multiple>
                                         @foreach ($taskUsers as $u)
                                             @if (is_null($u->tskId))
                                                 <option value="{{$u->id}}">{{$u->name}}</option>
