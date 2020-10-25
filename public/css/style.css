@@ -9,3 +9,7 @@ body {
 td a{
     display:block;
 }
+
+td a:hover {
+    text-decoration: none;
+}

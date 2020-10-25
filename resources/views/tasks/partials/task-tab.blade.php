@@ -4,13 +4,14 @@
     </h1>
 
     <div class="table-responsive">
-        <table class="table table-striped table-hover" id="task-table">
+        <table class="table table-striped table-hover display" id="task-table">
             <thead>
                <!-- <th>ID</th>-->
                 <th>Name</th>
                 <th>Project</th>
                 <!--<th>Description</th>
-                <th colspan="3">Status</th>-->
+                <th>Status</th>-->
+                <th></th>
             </thead>
             <tbody>
                 @foreach ($tasks as $task)
@@ -42,6 +43,13 @@
                     }
                 });
             }
+        });
+
+        $(document).ready(function() {
+            $('table').DataTable({
+                paging: false,
+                info: false
+            });
         });
     </script>
 @stop

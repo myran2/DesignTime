@@ -4,11 +4,12 @@
     </h1>
 
     <div class="table-responsive">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover display">
             <thead>
                 <th>Name</th>
                 <th>Description</th>
-                <th colspan="3">Status</th>
+                <th>Status</th>
+                <th></th>
             </thead>
             <tbody>
                 @foreach ($projects as $project)
@@ -18,3 +19,14 @@
         </table>
     </div>
 </div>
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('table').DataTable({
+                paging: false,
+                info: false
+            });
+        });
+    </script>
+@stop

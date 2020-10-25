@@ -1,29 +1,35 @@
 <tr>
     <!-- Project Name -->
     <td class="table-text">
-        {{ $project->name }}
+        <a href="{{ route('projects.edit', $project->id) }}" >
+            {{ $project->name }}
+        </a>
     </td>
 
     <!-- Project Description -->
     <td>
-        {{ $project->description }}
+        <a href="{{ route('projects.edit', $project->id) }}" >
+            {{ $project->description }}
+        </a>
     </td>
 
     <!-- Project Status -->
     <td>
-        @if ($project->avg_status == 2.0)
-            <span class="label label-success">
-                Complete
+        <a href="{{ route('projects.edit', $project->id) }}" >
+            @if ($project->avg_status == 2.0)
+                <span class="label label-success">
+                    Complete
+                </span>
+            @elseif ($project->avg_status > 0 && $project->avg_status < 2)
+            <span class="label label-info">
+                    In Progress
             </span>
-        @elseif ($project->avg_status > 0 && $project->avg_status < 2)
-        <span class="label label-info">
-                In Progress
-        </span>
-        @elseif ($project->avg_status == 0.0)
-            <span class="label label-default">
-                Not Started
-            </span>
-        @endif
+            @elseif ($project->avg_status == 0.0)
+                <span class="label label-default">
+                    Not Started
+                </span>
+            @endif
+        </a>
     </td>
 
     <!-- Project Edit Icon -->
