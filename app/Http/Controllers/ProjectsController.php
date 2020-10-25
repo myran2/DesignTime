@@ -12,7 +12,7 @@ class ProjectsController extends Controller
 {
     protected $rules = [
         'name' 			=> 'required|max:60',
-        'description'   => 'max:255',
+        'description'   => 'max:1000',
     ];
     
     /**
