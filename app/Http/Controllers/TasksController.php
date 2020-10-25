@@ -82,7 +82,7 @@ class TasksController extends Controller
         $task_data['creator_id'] = $user->id;
 
         // Assign a project to the task if one is selected.
-        $task['project_id'] = $request->input('project', NULL);
+        $task_data['project_id'] = $request->input('project', NULL);
 
         // saves new task to task table
         $task_id = Task::create($task_data)->id;
