@@ -19,16 +19,6 @@
 
         <!-- AJAX Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-        <style>
-            body {
-                font-family: 'Lato';
-            }
-
-            .fa-btn {
-                margin-right: 6px;
-            }
-        </style>
     </head>
     <body id="app-layout">
         <nav class="navbar navbar-default navbar-static-top">
@@ -106,8 +96,6 @@
         <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
-        {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 
         @yield('scripts')
 

@@ -9,8 +9,8 @@
                <!-- <th>ID</th>-->
                 <th>Name</th>
                 <th>Project</th>
-                <th>Description</th>
-                <th colspan="3">Status</th>
+                <!--<th>Description</th>
+                <th colspan="3">Status</th>-->
             </thead>
             <tbody>
                 @foreach ($tasks as $task)

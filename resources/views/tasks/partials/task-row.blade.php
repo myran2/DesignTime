@@ -1,20 +1,24 @@
 <tr id="item_{{ $task->id }}">
     <!-- Task Name -->
     <td class="table-text">
-        {{ $task->name }}
+        <a href="{{ route('tasks.edit', $task->id) }}">
+            {{ $task->name }}
+        </a>
     </td>
 
     <!-- Parent Project Name -->
     <td class="table-text">
-        {{ $task->project()->value('name') }}
+        <a href="{{ route('tasks.edit', $task->id) }}">
+            {{ $task->project()->value('name') }}
+        </a>
     </td>
 
-    <!-- Task Description -->
+    <!-- Task Description
     <td>
         {{ $task->description }}
-    </td>
+    </td>-->
 
-    <!-- Task Status -->
+    <!-- Task Status 
     <td>
         @if ($task->status === 2)
             <span class="label label-success">
@@ -29,11 +33,11 @@
                 Not Started
             </span>
         @endif
-    </td>
+    </td>-->
 
     <!-- Task Edit Icon -->
     <td>
-        <a href="{{ route('tasks.edit', $task->id) }}" class="pull-right">
+        <a href="{{ route('tasks.edit', $task->id) }}" class="">
             <span class="fa fa-pencil fa-fw" aria-hidden="true"></span>
             <span class="sr-only">Edit Task</span>
         </a>
