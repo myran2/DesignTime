@@ -33,9 +33,25 @@
                                 </div>
                             </div>
 
-                            <!-- Associated Tasks-->
+                            <!-- Current Associated Tasks -->
                             <div class="form-group row">
-                                {!! Form::label('tasks', 'Associated Tasks', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
+                                {!! Form::label('description', 'Current Task Links', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
+                                <div class="col-sm-6">
+                                    <ul class="list-group">
+                                        @foreach ($tasks as $t)
+                                            @if (!is_null($t->project_id))
+                                                <li class="list-group-item">
+                                                    <a href="/tasks/{{$t->id}}/edit">{{$t->name}}</a>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Edit Associated Tasks-->
+                            <div class="form-group row">
+                                {!! Form::label('tasks', 'Edit Associated Tasks', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
                                     <select name="tasks[]" id="tasks" class="selectpicker" multiple data-live-search="true">
                                         @foreach ($tasks as $t)
