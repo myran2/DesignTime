@@ -38,10 +38,10 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.index', [
-            'tasks'           => $user->tasks()->orderBy('pivot_sort_order')->get(),
-            'tasksNotStarted' => $user->tasks()->where('status', '0')->orderBy('pivot_sort_order')->get(),
-            'tasksInProgress' => $user->tasks()->where('status', '1')->orderBy('pivot_sort_order')->get(),
-            'tasksComplete'   => $user->tasks()->where('status', '2')->orderBy('pivot_sort_order')->get(),
+            'tasks'           => $user->tasks()->where('hide', 0)->orderBy('pivot_sort_order')->get(),
+            'tasksNotStarted' => $user->tasks()->where('hide', 0)->where('status', '0')->where('hide', 0)->orderBy('pivot_sort_order')->get(),
+            'tasksInProgress' => $user->tasks()->where('hide', 0)->where('status', '1')->orderBy('pivot_sort_order')->get(),
+            'tasksComplete'   => $user->tasks()->where('hide', 0)->where('status', '2')->orderBy('pivot_sort_order')->get(),
         ]);
     }
 
@@ -181,7 +181,7 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        Task::findOrFail($id)->delete();
+        Task::findOrFail($id)->update(['hide' => 1]);
 
         return redirect('/tasks')->with('success', 'Task Deleted');
     }

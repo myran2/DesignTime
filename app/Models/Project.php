@@ -11,7 +11,7 @@ class Project extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'creator_id'];
+    protected $fillable = ['name', 'description', 'creator_id', 'hide'];
 
     /**
      * Get the tasks associated with this project
