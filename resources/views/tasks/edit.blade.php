@@ -97,9 +97,11 @@
                             <span class="fa fa-reply" aria-hidden="true"></span> Back to Tasks
                         </a>
 
+                        <div style="height: 35px"></div>
+
                         {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('tasks.destroy', $task->id))) !!}
                             {{ method_field('DELETE') }}
-                            {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Task</span>', array('type' => 'submit', 'class' => 'btn btn-danger'))}}
+                            {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Task</span>', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirm("Delete this task?")'))}}
                         {!! Form::close() !!}
 
                     </div>
