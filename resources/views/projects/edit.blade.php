@@ -80,12 +80,14 @@
                             <span class="fa fa-reply" aria-hidden="true"></span> Back to Projects
                         </a>
 
-                        <div style="height: 35px"></div>
+                        @if ($user->role == 1)
+                            <div style="height: 35px"></div>
 
-                        {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('projects.destroy', $project->id))) !!}
-                            {{ method_field('DELETE') }}
-                            {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Project</span>', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirm("Delete this project?")'))}}
-                        {!! Form::close() !!}
+                            {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('projects.destroy', $project->id))) !!}
+                                {{ method_field('DELETE') }}
+                                {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Project</span>', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirm("Delete this project?")'))}}
+                            {!! Form::close() !!}
+                        @endif
 
                     </div>
                 </div>

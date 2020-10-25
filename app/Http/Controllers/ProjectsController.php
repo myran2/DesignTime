@@ -116,7 +116,7 @@ class ProjectsController extends Controller
         
         $data = array(
             'project' => $project,
-            //'user' => $user,
+            'user' => $user,
             'tasks' => $tasks,
         );
         return view('projects.edit')->with($data);
