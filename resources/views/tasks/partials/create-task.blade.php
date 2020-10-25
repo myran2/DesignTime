@@ -24,6 +24,7 @@
         {!! Form::label('projects', 'Project', array('class' => 'col-sm-3 control-label text-right')) !!}
         <div class="col-sm-6">
             <select name="project" id="project" class="selectpicker" data-live-search="true">
+                <option selected disabled>Nothing Selected</option>
                 @foreach ($projects as $p)
                     <option value="{{$p->id}}">{{$p->name}}</option>
                 @endforeach

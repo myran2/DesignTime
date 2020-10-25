@@ -46,6 +46,7 @@
                                 {!! Form::label('project', 'Project', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
                                     <select name="project" id="project" class="selectpicker" data-live-search="true">
+                                        <option selected disabled>Nothing Selected</option>
                                         @foreach ($projects as $p)
                                             @if ($p->id === $task->project_id)
                                                 <option value="{{$p->id}}" selected="selected">{{$p->name}}</option>
