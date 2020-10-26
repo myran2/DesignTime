@@ -32,7 +32,7 @@ class User extends Authenticatable
      */
     public function tasks()
     {
-        return $this->belongsToMany('App\Models\Task')->withPivot('sort_order');
+        return $this->belongsToMany('App\Models\Task');
     }
 
     public function projects()

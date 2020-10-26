@@ -38,10 +38,10 @@ class TasksController extends Controller
         $user = Auth::user();
 
         return view('tasks.index', [
-            'tasks'           => $user->tasks()->where('hide', 0)->orderBy('pivot_sort_order')->get(),
-            'tasksNotStarted' => $user->tasks()->where('hide', 0)->where('status', '0')->where('hide', 0)->orderBy('pivot_sort_order')->get(),
-            'tasksInProgress' => $user->tasks()->where('hide', 0)->where('status', '1')->orderBy('pivot_sort_order')->get(),
-            'tasksComplete'   => $user->tasks()->where('hide', 0)->where('status', '2')->orderBy('pivot_sort_order')->get(),
+            'tasks'           => $user->tasks()->where('hide', 0)->orderBy('priority')->get(),
+            'tasksNotStarted' => $user->tasks()->where('hide', 0)->where('status', '0')->where('hide', 0)->orderBy('priority')->get(),
+            'tasksInProgress' => $user->tasks()->where('hide', 0)->where('status', '1')->orderBy('priority')->get(),
+            'tasksComplete'   => $user->tasks()->where('hide', 0)->where('status', '2')->orderBy('priority')->get(),
         ]);
     }
 
@@ -190,9 +190,8 @@ class TasksController extends Controller
     {
         $user = Auth::user();
 
-        foreach($request->input('item') as $sort_order => $task_id) {
-            echo $task_id . " " . $sort_order ."\n\n";
-            $user->tasks()->updateExistingPivot($task_id, ['sort_order' => $sort_order]);
+        foreach($request->input('item') as $priority => $task_id) {
+            Task::where('id', $task_id)->update(['priority' => $priority]);
         }
     }
 }
