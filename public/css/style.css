@@ -14,6 +14,6 @@ td a:hover {
     text-decoration: none;
 }
 
-.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+.form-group .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
     width: 100%;
 }

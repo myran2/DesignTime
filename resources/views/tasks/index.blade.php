@@ -8,6 +8,12 @@
             @include('common.status')
 
             <div id="content">
+                @if ($authedUser->role == 1)
+                    {{ Form::open(array('route' => array('tasks.index'), 'id' => 'changeUser', 'method' => 'get')) }}
+                        {{ Form::select('selectedUser', $allUsers, $user->id, ['class' => 'selectpicker pull-right', 'id' => 'userPicker']) }}
+                    {{ Form::close() }}
+                @endif
+
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                     <li class="active"><a href="#all" data-toggle="tab"><span class="fa fa-tasks" aria-hidden="true"></span> <span class="hidden-xs">All</span></a></li>
                     <li><a href="#not-started" data-toggle="tab"><span class="fa fa-times" aria-hidden="true"></span> <span class="hidden-xs">Not Started</span></a></li>

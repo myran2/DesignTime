@@ -33,15 +33,22 @@ class TasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
+        $authedUser = Auth::user();
+        $user_id = $request->input('selectedUser', $authedUser->id);
+        $user = User::findOrFail($user_id);
+
+        $allUsers = User::select(['id', 'name'])->pluck('name', 'id');
 
         return view('tasks.index', [
             'tasks'           => $user->tasks()->where('hide', 0)->orderBy('priority')->get(),
             'tasksNotStarted' => $user->tasks()->where('hide', 0)->where('status', '0')->where('hide', 0)->orderBy('priority')->get(),
             'tasksInProgress' => $user->tasks()->where('hide', 0)->where('status', '1')->orderBy('priority')->get(),
             'tasksComplete'   => $user->tasks()->where('hide', 0)->where('status', '2')->orderBy('priority')->get(),
+            'allUsers' => $allUsers,
+            'user' => $user,
+            'authedUser' => $authedUser
         ]);
     }
 
@@ -188,8 +195,6 @@ class TasksController extends Controller
 
     public function setOrder(Request $request)
     {
-        $user = Auth::user();
-
         foreach($request->input('item') as $priority => $task_id) {
             Task::where('id', $task_id)->update(['priority' => $priority]);
         }

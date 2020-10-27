@@ -13,6 +13,7 @@ Route::redirect('/home', '/tasks');
 Route::redirect('/', '/tasks');
 
 Route::post('/tasks/order', 'TasksController@setOrder');
+
 Route::resource('/tasks', 'TasksController');
 
 Route::resource('/projects', 'ProjectsController');
