@@ -173,6 +173,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
 
+        Spatie\Honeypot\HoneypotServiceProvider::class,
+
     ],
 
     /*
@@ -221,7 +223,7 @@ return [
         'Form'      => Collective\Html\FormFacade::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
         'Html'      => Collective\Html\HtmlFacade::class,
-
+        'Honeypot' => Spatie\Honeypot\Facade\Honeypot::class,
     ],
 
 ];
