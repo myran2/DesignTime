@@ -127,6 +127,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | TinyMCE API Key
+    |--------------------------------------------------------------------------
+    |
+    | API Key generated from https://www.tiny.cloud/auth/signup
+    | It will work without one but it will complain.
+    |
+    */
+
+    'tinymce_api_key' => env('TINYMCE_API_KEY', 'no-api-key'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |

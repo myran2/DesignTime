@@ -69,6 +69,7 @@ class TasksController extends Controller
         $projects = Project::query()->get();
         
         $data = array(
+            'user' => $user,
             'additionalUsers' => $additionalUsers,
             'projects' => $projects
         );

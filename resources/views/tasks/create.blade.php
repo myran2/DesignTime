@@ -31,11 +31,20 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdn.tiny.cloud/1/{{config('app.tinymce_api_key')}}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
     <script>
         $(function () {
             $('.datetimepicker').datepicker({
                 format: 'yyyy-mm-dd'
+            });
+
+            tinymce.init({
+                selector:'#task-description',
+                plugins: 'image',
+                width: 600,
+                height: 400,
+                tinycomments_author: '{{$user->name}}',
             });
         });
     </script>
