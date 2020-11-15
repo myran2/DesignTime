@@ -19,6 +19,15 @@
         </div>
     </div>
 
+    <!-- Due Date -->
+    <div class="form-group">
+        <label for="due_date" class="col-sm-3 control-label">Due Date</label>
+
+        <div class="col-sm-6">
+            <input name="due_date" type="text" class="form-control datetimepicker">
+        </div>
+    </div>
+
     <!-- Project -->
     <div class="form-group row">
         {!! Form::label('projects', 'Project', array('class' => 'col-sm-3 control-label text-right')) !!}

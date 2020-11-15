@@ -33,6 +33,14 @@
                                 </div>
                             </div>
 
+                            <!-- Task Due Date -->
+                            <div class="form-group row">
+                                {!! Form::label('due_date', 'Due Date', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
+                                <div class="col-sm-6">
+                                    {!! Form::text('due_date', null, array('class' => 'form-control datetimepicker')) !!}
+                                </div>
+                            </div>
+
                             <!-- Task Status -->
                             <div class="form-group row">
                             {!! Form::label('status', 'Status', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
@@ -112,4 +120,17 @@
         </div>
     </div>
 
+@endsection
+
+@section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+
+    <script>
+        $(function () {
+            $('.datetimepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+    </script>
 @endsection

@@ -8,6 +8,7 @@
             <thead>
                 <th>Name</th>
                 <th>Project</th>
+                <th>Due Date</th>
                 <th></th>
             </thead>
             <tbody>

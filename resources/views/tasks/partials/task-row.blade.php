@@ -13,6 +13,12 @@
         </a>
     </td>
 
+    <td class="table-text">
+        <a href="{{ route('tasks.edit', $task->id) }}">
+            {{ $task->due_date }}
+        </a>
+    </td>
+
     <!-- Task Description
     <td>
         {{ $task->description }}

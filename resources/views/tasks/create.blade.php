@@ -27,3 +27,16 @@
         </div>
     </div>
 @endsection
+
+@section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+
+    <script>
+        $(function () {
+            $('.datetimepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+    </script>
+@endsection

@@ -16,6 +16,7 @@ class TasksController extends Controller
         'name' 			=> 'required|max:60',
         'description'   => 'max:2500',
         'status'    	=> 'numeric',
+        'due_date'      => 'required|date',
     ];
 
     /**
@@ -166,6 +167,7 @@ class TasksController extends Controller
         $task->name = $request->input('name');
         $task->description = $request->input('description');
         $task->status = $request->input('status');
+        $task->due_date = $request->input('due_date');
 
         // Assign a project to the task if one is selected.
         $task['project_id'] = $request->input('project', NULL);
