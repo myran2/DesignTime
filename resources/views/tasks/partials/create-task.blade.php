@@ -15,7 +15,7 @@
         <label for="task-description" class="col-sm-3 control-label">Description</label>
 
         <div class="col-sm-6">
-            <textarea name="description" id="task-description" class="form-control" value="{{ old('task') }}" maxlength="155"></textarea>
+            <textarea name="description" id="task-description" class="form-control" value="{{ old('task') }}" maxlength="2500"></textarea>
         </div>
     </div>
 

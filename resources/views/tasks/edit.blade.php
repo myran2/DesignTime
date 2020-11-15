@@ -37,7 +37,7 @@
                             <div class="form-group row">
                             {!! Form::label('status', 'Status', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::select('status', array(0 => 'Not Started', 1 => 'In Progress', 2 => 'Complete'), $task->status, array('class' => 'selectpicker')) !!}
+                                    {!! Form::select('status', array(0 => 'Unassigned', 1 => 'Assigned', 2 => 'Complete'), $task->status, array('class' => 'selectpicker')) !!}
                                 </div>
                             </div>
 
@@ -102,7 +102,7 @@
 
                             {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('tasks.destroy', $task->id))) !!}
                                 {{ method_field('DELETE') }}
-                                {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Task</span>', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirm("Delete this task?")'))}}
+                                {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Archive</span> <span class="hidden-sm hidden-xs">Task</span>', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirm("Archive this task?")'))}}
                             {!! Form::close() !!}
                         @endif
 

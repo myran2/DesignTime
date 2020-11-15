@@ -15,7 +15,7 @@
         <label for="project-description" class="col-sm-3 control-label">Description</label>
 
         <div class="col-sm-6">
-            <textarea name="description" id="project-description" class="form-control" value="{{ old('project') }}" maxlength="155"></textarea>
+            <textarea name="description" id="project-description" class="form-control" value="{{ old('project') }}" maxlength="2500"></textarea>
         </div>
     </div>
 

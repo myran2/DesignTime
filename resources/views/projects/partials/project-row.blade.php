@@ -22,11 +22,11 @@
                 </span>
             @elseif ($project->avg_status > 0 && $project->avg_status < 2)
             <span class="label label-info">
-                    In Progress
+                    Assigned
             </span>
             @elseif ($project->avg_status == 0.0)
                 <span class="label label-default">
-                    Not Started
+                    Unassigned
                 </span>
             @endif
         </a>

@@ -85,7 +85,7 @@
 
                             {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('projects.destroy', $project->id))) !!}
                                 {{ method_field('DELETE') }}
-                                {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Project</span>', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirm("Delete this project?")'))}}
+                                {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Archive</span> <span class="hidden-sm hidden-xs">Project</span>', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirm("Archive this project?")'))}}
                             {!! Form::close() !!}
                         @endif
 

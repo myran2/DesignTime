@@ -43,8 +43,8 @@ class TasksController extends Controller
 
         return view('tasks.index', [
             'tasks'           => $user->tasks()->where('hide', 0)->orderBy('priority')->get(),
-            'tasksNotStarted' => $user->tasks()->where('hide', 0)->where('status', '0')->where('hide', 0)->orderBy('priority')->get(),
-            'tasksInProgress' => $user->tasks()->where('hide', 0)->where('status', '1')->orderBy('priority')->get(),
+            'tasksUnassigned' => $user->tasks()->where('hide', 0)->where('status', '0')->where('hide', 0)->orderBy('priority')->get(),
+            'tasksAssigned'   => $user->tasks()->where('hide', 0)->where('status', '1')->orderBy('priority')->get(),
             'tasksComplete'   => $user->tasks()->where('hide', 0)->where('status', '2')->orderBy('priority')->get(),
             'allUsers' => $allUsers,
             'user' => $user,
