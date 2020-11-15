@@ -2,7 +2,10 @@
     <!-- Task Name -->
     <td class="table-text">
         <a href="{{ route('tasks.edit', $task->id) }}">
-            {{ $task->name }}
+            {{ $task->name }} -
+            @foreach ($task->users as $u)
+                <a title="{{$u->name}}">{{explode(" ", $u->name)[0][0]}}{{explode(" ", $u->name)[1][0] ?? ''}}</a>
+            @endforeach
         </a>
     </td>
 
