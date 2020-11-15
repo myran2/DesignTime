@@ -41,10 +41,17 @@
 
             tinymce.init({
                 selector:'#task-description',
-                plugins: 'image',
+                plugins: 'image code link autolink',
                 width: 600,
                 height: 400,
                 tinycomments_author: '{{$user->name}}',
+                setup: function(editor){
+                    editor.on('init', function() {
+                        $(editor.getBody()).on('click', 'a[href]', function(e) {
+                            window.open($(e.currentTarget).attr('href'));
+                        });
+                    });
+                }
             });
         });
     </script>
