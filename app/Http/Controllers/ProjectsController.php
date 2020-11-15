@@ -41,7 +41,7 @@ class ProjectsController extends Controller
                                     ->get(),
 
             // projects containing only tasks that are not started
-            'projectsUnassigned' => Project::where('hide', 0)->leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
+            'projectsHold' => Project::where('hide', 0)->leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
                                         $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
                                     })->select('projects.name', 'projects.description', 'projects.id', 'avg_status')
                                     ->where('avg_status', '0')->get(),
@@ -53,7 +53,7 @@ class ProjectsController extends Controller
                                     ->where('avg_status', '2')->get(),
 
             // everything else (1+ in progress task or a mix of complete and not started)
-            'projectsAssigned' => Project::where('hide', 0)->leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
+            'projectsInProgress' => Project::where('hide', 0)->leftJoinSub($maxStatusByProject, 'maxStatusSubQ', function ($join) {
                                         $join->on('projects.id', '=', 'maxStatusSubQ.project_id');
                                     })->select('projects.name', 'projects.description', 'projects.id', 'avg_status')
                                     ->where('avg_status', '>', 0)->where('avg_status', '<', 2)->get(),

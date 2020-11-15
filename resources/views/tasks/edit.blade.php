@@ -37,7 +37,7 @@
                             <div class="form-group row">
                             {!! Form::label('status', 'Status', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::select('status', array(0 => 'Unassigned', 1 => 'Assigned', 2 => 'Complete'), $task->status, array('class' => 'selectpicker')) !!}
+                                    {!! Form::select('status', array(0 => 'Hold', 1 => 'In Progress', 2 => 'Complete'), $task->status, array('class' => 'selectpicker')) !!}
                                 </div>
                             </div>
 
